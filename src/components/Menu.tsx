@@ -148,13 +148,13 @@ const Menu: React.FC = () => {
         </div>
 
         <FadeIn delay={0.2}>
-          <div className="flex flex-wrap justify-center gap-3 mb-16">
+          <div className="flex overflow-x-auto md:flex-wrap justify-center gap-3 mb-16 pb-2 md:pb-0 scrollbar-none">
             {categories.map((category) => (
               <button
                 key={category.id}
                 onClick={() => setActiveCategory(category.id)}
                 className={cn(
-                  "px-6 py-2.5 transition-all duration-300 uppercase text-sm tracking-wider",
+                  "px-6 py-2.5 transition-all duration-300 uppercase text-sm tracking-wider whitespace-nowrap",
                   activeCategory === category.id
                     ? "bg-gold text-white"
                     : "bg-transparent border border-gold/30 text-gold hover:bg-gold/5"
@@ -166,42 +166,50 @@ const Menu: React.FC = () => {
           </div>
         </FadeIn>
 
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           {menuItems[activeCategory].map((item, index) => (
             <FadeIn 
               key={item.name} 
               delay={0.1 * (index + 1)} 
               duration={0.8} 
               direction="up"
-              className="mb-6"
+              className="mb-10"
             >
               <div className={cn(
-                "flex flex-col md:flex-row justify-between py-6 border-b border-gold/10",
-                item.featured && "bg-gold/5 px-4 -mx-4 rounded"
+                "relative flex flex-col md:flex-row gap-6 py-6 rounded-lg overflow-hidden",
+                item.featured ? "bg-gold/5 border border-gold/10" : "border-b border-gold/10"
               )}>
-                <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
-                  <div className="h-20 w-20 min-w-20 rounded-md overflow-hidden">
-                    <img 
-                      src={item.image} 
-                      alt={item.name}
-                      className="h-full w-full object-cover hover:scale-110 transition-transform duration-700"
-                    />
-                  </div>
+                {/* Larger image container with hover effect */}
+                <div className="md:w-1/3 h-60 md:h-48 overflow-hidden rounded-lg mx-auto md:mx-0 max-w-xs">
+                  <img 
+                    src={item.image} 
+                    alt={item.name}
+                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-700 ease-in-out"
+                  />
+                </div>
+                
+                <div className="flex flex-col justify-between md:w-2/3 px-4 md:px-0">
                   <div>
-                    <div className="flex items-center">
+                    <div className="flex items-center flex-wrap gap-2">
                       <h3 className="font-serif text-xl md:text-2xl">
                         {item.name}
                       </h3>
                       {item.featured && (
-                        <span className="ml-3 text-xs uppercase tracking-wider bg-gold/20 text-gold px-2 py-0.5">
+                        <span className="text-xs uppercase tracking-wider bg-gold/20 text-gold px-2 py-0.5 rounded">
                           Chef's Choice
                         </span>
                       )}
                     </div>
-                    <p className="text-muted-foreground text-sm mt-2">{item.description}</p>
+                    <p className="text-muted-foreground text-sm mt-2 mb-4">{item.description}</p>
+                  </div>
+                  
+                  <div className="flex justify-between items-center">
+                    <span className="text-gold font-serif text-xl">{item.price}</span>
+                    <button className="text-sm uppercase tracking-wider text-gold border border-gold/30 px-3 py-1 hover:bg-gold hover:text-white transition-colors duration-300">
+                      Order
+                    </button>
                   </div>
                 </div>
-                <span className="text-gold font-serif text-xl mt-3 md:mt-1 md:ml-4">{item.price}</span>
               </div>
             </FadeIn>
           ))}

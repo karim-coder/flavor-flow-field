@@ -27,6 +27,7 @@ const Hero: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [parallaxElements, setParallaxElements] = useState({ x: 0, y: 0 });
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [transitioning, setTransitioning] = useState(false);
 
   useEffect(() => {
     setIsLoaded(true);
@@ -41,7 +42,7 @@ const Hero: React.FC = () => {
     
     // Auto rotate slides
     const intervalId = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % HERO_IMAGES.length);
+      goToNextSlide();
     }, 6000);
     
     return () => {
@@ -51,11 +52,33 @@ const Hero: React.FC = () => {
   }, []);
 
   const goToNextSlide = () => {
+    if (transitioning) return;
+    
+    setTransitioning(true);
     setCurrentSlide((prev) => (prev + 1) % HERO_IMAGES.length);
+    
+    // Reset transitioning state after animation completes
+    setTimeout(() => setTransitioning(false), 1000);
   };
 
   const goToPrevSlide = () => {
+    if (transitioning) return;
+    
+    setTransitioning(true);
     setCurrentSlide((prev) => (prev - 1 + HERO_IMAGES.length) % HERO_IMAGES.length);
+    
+    // Reset transitioning state after animation completes
+    setTimeout(() => setTransitioning(false), 1000);
+  };
+
+  const goToSlide = (index: number) => {
+    if (transitioning || index === currentSlide) return;
+    
+    setTransitioning(true);
+    setCurrentSlide(index);
+    
+    // Reset transitioning state after animation completes
+    setTimeout(() => setTransitioning(false), 1000);
   };
 
   return (
@@ -63,79 +86,87 @@ const Hero: React.FC = () => {
       id="home" 
       className="relative h-screen w-full overflow-hidden bg-black"
     >
-      {/* Background with Carousel Effect */}
-      <div className="absolute inset-0 z-0 parallax-container">
+      {/* Background with Improved Carousel Effect */}
+      <div className="absolute inset-0 z-0">
         {HERO_IMAGES.map((image, index) => (
           <div 
             key={index}
             className={cn(
-              "absolute inset-0 bg-cover bg-center transition-all duration-1500 ease-in-out",
-              isLoaded ? "opacity-50 scale-105" : "opacity-0 scale-110",
-              currentSlide === index ? "opacity-50 z-10" : "opacity-0 z-0"
+              "absolute inset-0 bg-cover bg-center transition-all duration-1000",
+              currentSlide === index 
+                ? "opacity-100 scale-105 z-10" 
+                : "opacity-0 scale-100 z-0"
             )}
             style={{
               backgroundImage: `url(${image.src})`,
-              transform: currentSlide === index 
-                ? `translate(${parallaxElements.x}px, ${parallaxElements.y}px) scale(1.1)` 
-                : `translate(${parallaxElements.x}px, ${parallaxElements.y}px) scale(1.05)`
+              transform: `translate(${parallaxElements.x}px, ${parallaxElements.y}px) scale(${currentSlide === index ? 1.05 : 1})`,
+              transition: "opacity 1s ease-in-out, transform 1.2s ease-in-out"
             }}
           />
         ))}
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/40 z-20" />
       </div>
 
-      {/* Carousel Controls */}
+      {/* Carousel Controls - More visible on mobile */}
       <div className="absolute bottom-1/2 w-full flex justify-between px-4 md:px-8 z-30">
         <button 
           onClick={goToPrevSlide}
-          className="bg-black/30 backdrop-blur-sm text-white p-2 rounded-full hover:bg-black/50 transition-all duration-300 hidden md:flex"
+          disabled={transitioning}
+          className="bg-black/40 backdrop-blur-sm text-white p-3 rounded-full hover:bg-black/60 active:scale-95 transition-all duration-300 flex items-center justify-center"
+          aria-label="Previous slide"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
         <button 
           onClick={goToNextSlide}
-          className="bg-black/30 backdrop-blur-sm text-white p-2 rounded-full hover:bg-black/50 transition-all duration-300 hidden md:flex"
+          disabled={transitioning}
+          className="bg-black/40 backdrop-blur-sm text-white p-3 rounded-full hover:bg-black/60 active:scale-95 transition-all duration-300 flex items-center justify-center"
+          aria-label="Next slide"
         >
           <ChevronRight className="w-5 h-5" />
         </button>
       </div>
 
-      {/* Carousel Indicators */}
-      <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 z-30 flex space-x-2">
+      {/* Improved Carousel Indicators */}
+      <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 z-30 flex space-x-3">
         {HERO_IMAGES.map((_, index) => (
           <button
             key={index}
-            onClick={() => setCurrentSlide(index)}
+            onClick={() => goToSlide(index)}
+            disabled={transitioning}
             className={cn(
-              "w-2 h-2 rounded-full transition-all duration-300",
-              currentSlide === index ? "bg-gold w-6" : "bg-white/50"
+              "transition-all duration-500 rounded-full outline-none focus:ring-2 focus:ring-gold/50",
+              currentSlide === index 
+                ? "bg-gold w-8 h-2" 
+                : "bg-white/40 w-2 h-2 hover:bg-white/70"
             )}
+            aria-label={`Go to slide ${index + 1}`}
           />
         ))}
       </div>
 
-      {/* Content */}
+      {/* Content with improved animations */}
       <div className="relative z-20 h-full flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-5xl mx-auto">
-          <FadeIn delay={0.3} direction="up" duration={1.2} initialOpacity={0}>
+          <FadeIn delay={0.3} direction="up" duration={1} initialOpacity={0}>
             <p className="text-gold uppercase tracking-[0.4em] mb-8 text-sm sm:text-base font-light">
               Fine Dining Experience Since 2008
             </p>
           </FadeIn>
 
-          <FadeIn delay={0.7} direction="up" duration={1.2} initialOpacity={0} springEffect>
+          <FadeIn delay={0.7} direction="up" duration={1} initialOpacity={0} springEffect>
             <h1 className="text-4xl sm:text-5xl md:text-7xl text-white font-serif font-light leading-tight tracking-wide mb-8 reveal-text">
               Exceptional Cuisine <br /> Refined Elegance
             </h1>
           </FadeIn>
 
-          <FadeIn delay={1.1} direction="up" duration={1.2} initialOpacity={0}>
+          <FadeIn delay={1.1} direction="up" duration={1} initialOpacity={0}>
             <p className="text-white/80 text-base sm:text-lg mb-12 max-w-2xl mx-auto font-light">
               An unforgettable dining experience in the heart of London. Michelin-starred cuisine in a setting of understated elegance.
             </p>
           </FadeIn>
 
-          <FadeIn delay={1.5} direction="up" duration={1.2} initialOpacity={0} staggerChildren childrenDelay={0.15}>
+          <FadeIn delay={1.5} direction="up" duration={1} initialOpacity={0} staggerChildren childrenDelay={0.15}>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Link 
                 to="/reservations" 
@@ -155,7 +186,7 @@ const Hero: React.FC = () => {
         </div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator with improved animation */}
       <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20">
         <div className={cn(
           "flex flex-col items-center transition-opacity duration-1000",
