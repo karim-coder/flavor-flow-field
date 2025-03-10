@@ -1,11 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { X, Menu } from 'lucide-react';
+import { X, Menu as MenuIcon } from 'lucide-react';
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,13 +26,17 @@ const Navbar: React.FC = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const isActive = (path: string) => {
+    if (path === '/') return location.pathname === path;
+    return location.pathname.startsWith(path);
+  };
+
   const navLinks = [
-    { title: 'Home', href: '#home' },
-    { title: 'About', href: '#about' },
-    { title: 'Menu', href: '#menu' },
-    { title: 'Reservations', href: '#reserve' },
-    { title: 'Gallery', href: '#gallery' },
-    { title: 'Contact', href: '#contact' }
+    { title: 'Home', href: '/' },
+    { title: 'About', href: '/about' },
+    { title: 'Menu', href: '/menu' },
+    { title: 'Reservations', href: '/reservations' },
+    { title: 'Contact', href: '/contact' }
   ];
 
   return (
@@ -45,24 +51,27 @@ const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <a 
-              href="#home" 
+            <Link 
+              to="/" 
               className="text-3xl font-serif font-bold tracking-wider"
             >
               <span className="text-gold">GALVIN</span>
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-8">
             {navLinks.map((link, index) => (
-              <a 
+              <Link 
                 key={index} 
-                href={link.href} 
-                className="navbar-link"
+                to={link.href} 
+                className={cn(
+                  "navbar-link",
+                  isActive(link.href) && "text-gold after:scale-x-100"
+                )}
               >
                 {link.title}
-              </a>
+              </Link>
             ))}
           </div>
 
@@ -76,7 +85,7 @@ const Navbar: React.FC = () => {
               {isMenuOpen ? (
                 <X className="h-6 w-6" />
               ) : (
-                <Menu className="h-6 w-6" />
+                <MenuIcon className="h-6 w-6" />
               )}
             </button>
           </div>
@@ -93,14 +102,17 @@ const Navbar: React.FC = () => {
         <div className="glass-panel mt-2 mx-4 rounded-lg shadow-lg overflow-hidden">
           <div className="flex flex-col py-4 space-y-3">
             {navLinks.map((link, index) => (
-              <a
+              <Link
                 key={index}
-                href={link.href}
-                className="px-6 py-3 hover:bg-gold/10 transition-colors duration-300"
+                to={link.href}
+                className={cn(
+                  "px-6 py-3 hover:bg-gold/10 transition-colors duration-300",
+                  isActive(link.href) && "text-gold bg-gold/5"
+                )}
                 onClick={() => setIsMenuOpen(false)}
               >
                 {link.title}
-              </a>
+              </Link>
             ))}
           </div>
         </div>

@@ -11,6 +11,10 @@ interface FadeInProps {
   once?: boolean;
   distance?: number;
   initialOpacity?: number;
+  easing?: string;
+  springEffect?: boolean;
+  staggerChildren?: boolean;
+  childrenDelay?: number;
 }
 
 const FadeIn: React.FC<FadeInProps> = ({
@@ -23,6 +27,10 @@ const FadeIn: React.FC<FadeInProps> = ({
   once = true,
   distance = 40,
   initialOpacity = 0,
+  easing = 'cubic-bezier(0.215, 0.61, 0.355, 1)',
+  springEffect = false,
+  staggerChildren = false,
+  childrenDelay = 0.1,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const domRef = useRef<HTMLDivElement>(null);
@@ -76,17 +84,39 @@ const FadeIn: React.FC<FadeInProps> = ({
     return '';
   };
 
+  const getTransitionStyle = () => {
+    let transitionTiming = easing;
+    if (springEffect) {
+      transitionTiming = 'cubic-bezier(0.34, 1.56, 0.64, 1)';
+    }
+    return `opacity ${duration}s ${delay}s ${transitionTiming}, transform ${duration}s ${delay}s ${transitionTiming}`;
+  };
+
+  // Apply staggered animations to children if needed
+  const childrenWithStagger = React.Children.map(children, (child, index) => {
+    if (!staggerChildren || !React.isValidElement(child)) return child;
+
+    return React.cloneElement(child as React.ReactElement, {
+      style: {
+        ...(child as React.ReactElement).props.style,
+        opacity: isVisible ? 1 : initialOpacity / 100,
+        transform: isVisible ? 'translate(0, 0)' : getTransformStyle(),
+        transition: `opacity ${duration}s ${delay + index * childrenDelay}s ${easing}, transform ${duration}s ${delay + index * childrenDelay}s ${easing}`,
+      }
+    });
+  });
+
   return (
     <div
       ref={domRef}
       className={className}
-      style={{
+      style={!staggerChildren ? {
         opacity: isVisible ? 1 : initialOpacity / 100,
         transform: isVisible ? 'translate(0, 0)' : getTransformStyle(),
-        transition: `opacity ${duration}s ${delay}s cubic-bezier(0.215, 0.61, 0.355, 1), transform ${duration}s ${delay}s cubic-bezier(0.215, 0.61, 0.355, 1)`,
-      }}
+        transition: getTransitionStyle(),
+      } : undefined}
     >
-      {children}
+      {staggerChildren ? childrenWithStagger : children}
     </div>
   );
 };
