@@ -9,16 +9,20 @@ interface FadeInProps {
   className?: string;
   threshold?: number;
   once?: boolean;
+  distance?: number;
+  initialOpacity?: number;
 }
 
 const FadeIn: React.FC<FadeInProps> = ({
   children,
   delay = 0,
   direction = 'up',
-  duration = 0.7,
+  duration = 0.9,
   className = '',
   threshold = 0.1,
   once = true,
+  distance = 40,
+  initialOpacity = 0,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const domRef = useRef<HTMLDivElement>(null);
@@ -56,17 +60,17 @@ const FadeIn: React.FC<FadeInProps> = ({
     if (!isVisible) {
       switch (direction) {
         case 'up':
-          return 'translate-y-[30px]';
+          return `translate-y-[${distance}px]`;
         case 'down':
-          return 'translate-y-[-30px]';
+          return `translate-y-[-${distance}px]`;
         case 'left':
-          return 'translate-x-[30px]';
+          return `translate-x-[${distance}px]`;
         case 'right':
-          return 'translate-x-[-30px]';
+          return `translate-x-[-${distance}px]`;
         case 'none':
           return '';
         default:
-          return 'translate-y-[30px]';
+          return `translate-y-[${distance}px]`;
       }
     }
     return '';
@@ -76,13 +80,13 @@ const FadeIn: React.FC<FadeInProps> = ({
     <div
       ref={domRef}
       className={`transition-all ${
-        isVisible ? 'opacity-100' : 'opacity-0'
+        isVisible ? 'opacity-100' : `opacity-${initialOpacity}`
       } ${getDirectionStyles()} ${className}`}
       style={{
         transitionDuration: `${duration}s`,
         transitionDelay: `${delay}s`,
         transitionProperty: 'opacity, transform',
-        transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+        transitionTimingFunction: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
       }}
     >
       {children}
