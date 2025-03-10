@@ -19,7 +19,7 @@ const Menu: React.FC = () => {
     { id: 'starters', label: 'Starters' },
     { id: 'mains', label: 'Main Courses' },
     { id: 'desserts', label: 'Desserts' },
-    { id: 'wines', label: 'Wine Selection' },
+    { id: 'wines', label: 'Wine Selection' }
   ];
 
   const menuItems: Record<MenuCategory, MenuItem[]> = {
@@ -28,92 +28,92 @@ const Menu: React.FC = () => {
         name: 'Dorset Crab Lasagne',
         description: 'Beurre Nantais & chives',
         price: '£24.50',
-        featured: true,
+        featured: true
       },
       {
         name: 'Heritage Beetroot Salad',
         description: 'Grilled Ragstone goat's cheese, red onion, watercress & aged balsamic',
-        price: '£14.50',
+        price: '£14.50'
       },
       {
         name: 'Citrus Cured Sea Trout',
         description: 'Avocado, cucumber & yuzu dressing',
-        price: '£18.00',
+        price: '£18.00'
       },
       {
         name: 'Steak Tartare',
         description: 'Hand cut Aberdeenshire beef, Savora mustard, cornichons & game chips',
-        price: '£22.00',
-      },
+        price: '£22.00'
+      }
     ],
     mains: [
       {
         name: 'Roast Cornish Cod',
         description: 'Cauliflower, sea vegetables & caviar velouté',
         price: '£33.00',
-        featured: true,
+        featured: true
       },
       {
         name: 'Pan-Fried Fillet of Sea Bass',
         description: 'Squid & ink farfalle, baby artichokes & sea herbs',
-        price: '£36.00',
+        price: '£36.00'
       },
       {
         name: 'Breast of Suffolk Chicken',
         description: 'Cep mushrooms, braised leg, wild garlic & black truffle sauce',
-        price: '£28.50',
+        price: '£28.50'
       },
       {
         name: 'Saddle of Cumbrian Lamb',
         description: 'Spring vegetables, wild garlic pesto & rosemary jus',
-        price: '£34.00',
-      },
+        price: '£34.00'
+      }
     ],
     desserts: [
       {
         name: 'Rhubarb Soufflé',
         description: 'Stem ginger ice cream',
         price: '£14.50',
-        featured: true,
+        featured: true
       },
       {
         name: 'Valrhona Chocolate Fondant',
         description: 'Salted caramel & vanilla ice cream',
-        price: '£14.00',
+        price: '£14.00'
       },
       {
         name: 'Apple Tart Tatin',
         description: 'Vanilla ice cream (for two)',
-        price: '£26.00',
+        price: '£26.00'
       },
       {
         name: 'Cheese Selection',
         description: 'Quince, celery, grapes & biscuits',
-        price: '£16.50',
-      },
+        price: '£16.50'
+      }
     ],
     wines: [
       {
         name: 'Dom Pérignon Vintage 2012',
         description: 'Champagne, France',
-        price: '£290',
+        price: '£290'
       },
       {
         name: 'Domaine Leflaive, Puligny-Montrachet',
         description: 'Burgundy, France 2018',
-        price: '£195',
+        price: '£195'
       },
       {
         name: 'Château Mouton Rothschild',
         description: 'Bordeaux, France 2015',
-        price: '£1,250',
+        price: '£1,250'
       },
       {
         name: 'Screaming Eagle',
         description: 'Napa Valley, USA 2017',
-        price: '£3,200',
-      },
-    ],
+        price: '£3,200'
+      }
+    ]
   };
 
   return (
