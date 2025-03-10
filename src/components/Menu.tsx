@@ -32,7 +32,7 @@ const Menu: React.FC = () => {
       },
       {
         name: 'Heritage Beetroot Salad',
-        description: 'Grilled Ragstone goat's cheese, red onion, watercress & aged balsamic',
+        description: 'Grilled Ragstone goat\'s cheese, red onion, watercress & aged balsamic',
         price: '£14.50'
       },
       {
