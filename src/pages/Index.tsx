@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import About from '@/components/About';
@@ -12,21 +12,6 @@ import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 
 const Index = () => {
-  // Smooth scroll effect for entire page
-  useEffect(() => {
-    const handleScrollSmoothing = () => {
-      document.documentElement.style.scrollBehavior = 'smooth';
-    };
-    
-    // Add event listeners
-    window.addEventListener('load', handleScrollSmoothing);
-    
-    // Cleanup
-    return () => {
-      window.removeEventListener('load', handleScrollSmoothing);
-    };
-  }, []);
-
   return (
     <div className="min-h-screen overflow-hidden">
       <Navbar />

@@ -56,21 +56,21 @@ const FadeIn: React.FC<FadeInProps> = ({
     };
   }, [once, threshold]);
 
-  const getDirectionStyles = () => {
+  const getTransformStyle = () => {
     if (!isVisible) {
       switch (direction) {
         case 'up':
-          return `translate-y-[${distance}px]`;
+          return `translateY(${distance}px)`;
         case 'down':
-          return `translate-y-[-${distance}px]`;
+          return `translateY(-${distance}px)`;
         case 'left':
-          return `translate-x-[${distance}px]`;
+          return `translateX(${distance}px)`;
         case 'right':
-          return `translate-x-[-${distance}px]`;
+          return `translateX(-${distance}px)`;
         case 'none':
           return '';
         default:
-          return `translate-y-[${distance}px]`;
+          return `translateY(${distance}px)`;
       }
     }
     return '';
@@ -79,14 +79,11 @@ const FadeIn: React.FC<FadeInProps> = ({
   return (
     <div
       ref={domRef}
-      className={`transition-all ${
-        isVisible ? 'opacity-100' : `opacity-${initialOpacity}`
-      } ${getDirectionStyles()} ${className}`}
+      className={className}
       style={{
-        transitionDuration: `${duration}s`,
-        transitionDelay: `${delay}s`,
-        transitionProperty: 'opacity, transform',
-        transitionTimingFunction: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
+        opacity: isVisible ? 1 : initialOpacity / 100,
+        transform: isVisible ? 'translate(0, 0)' : getTransformStyle(),
+        transition: `opacity ${duration}s ${delay}s cubic-bezier(0.215, 0.61, 0.355, 1), transform ${duration}s ${delay}s cubic-bezier(0.215, 0.61, 0.355, 1)`,
       }}
     >
       {children}
