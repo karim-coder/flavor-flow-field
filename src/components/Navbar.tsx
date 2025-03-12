@@ -1,8 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { X, Menu as MenuIcon } from 'lucide-react';
+import { ThemeToggle } from './theme-toggle';
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -44,7 +44,7 @@ const Navbar: React.FC = () => {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
         isScrolled 
-          ? 'bg-white/90 dark:bg-black/90 backdrop-blur-md py-3 shadow-md' 
+          ? 'bg-background/90 backdrop-blur-md py-3 shadow-md' 
           : 'bg-transparent py-6'
       )}
     >
@@ -60,7 +60,7 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-8">
+          <div className="hidden md:flex items-center space-x-8">
             {navLinks.map((link, index) => (
               <Link 
                 key={index} 
@@ -73,10 +73,12 @@ const Navbar: React.FC = () => {
                 {link.title}
               </Link>
             ))}
+            <ThemeToggle />
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center gap-4">
+            <ThemeToggle />
             <button 
               onClick={toggleMenu}
               className="p-2 focus:outline-none"
