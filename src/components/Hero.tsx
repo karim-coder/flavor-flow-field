@@ -2,14 +2,20 @@
 import React, { useEffect, useState } from 'react';
 import FadeIn from './animations/FadeIn';
 import { cn } from '@/lib/utils';
-import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, Play, Pause } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const HERO_IMAGES = [
+const HERO_CONTENT = [
   {
     type: 'image',
     src: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3774&q=80',
     alt: 'Elegant restaurant interior'
+  },
+  {
+    type: 'video',
+    src: 'https://player.vimeo.com/external/372309015.sd.mp4?s=07c6502d5a226cca9a7f0e69bd9e8ef0b70aa5f2&profile_id=164&oauth2_token_id=57447761',
+    alt: 'Chef preparing gourmet meal',
+    poster: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
   },
   {
     type: 'image',
@@ -28,6 +34,9 @@ const Hero: React.FC = () => {
   const [parallaxElements, setParallaxElements] = useState({ x: 0, y: 0 });
   const [currentSlide, setCurrentSlide] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+  const [isPaused, setIsPaused] = useState(false);
+  const videoRef = React.useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     setIsLoaded(true);
@@ -40,22 +49,43 @@ const Hero: React.FC = () => {
 
     window.addEventListener('mousemove', handleMouseMove);
     
-    // Auto rotate slides
+    // Auto rotate slides only when not on video slide or video is paused
     const intervalId = setInterval(() => {
-      goToNextSlide();
+      if (HERO_CONTENT[currentSlide].type !== 'video' || isPaused) {
+        goToNextSlide();
+      }
     }, 6000);
     
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       clearInterval(intervalId);
     };
-  }, []);
+  }, [currentSlide, isPaused]);
+
+  // Control video playback when slide changes
+  useEffect(() => {
+    if (HERO_CONTENT[currentSlide].type === 'video') {
+      if (videoRef.current) {
+        if (isVideoPlaying) {
+          videoRef.current.play().catch(err => console.log('Video autoplay prevented:', err));
+          setIsPaused(false);
+        } else {
+          videoRef.current.pause();
+          setIsPaused(true);
+        }
+      }
+    }
+  }, [currentSlide, isVideoPlaying]);
+
+  const toggleVideoPlayback = () => {
+    setIsVideoPlaying(!isVideoPlaying);
+  };
 
   const goToNextSlide = () => {
     if (transitioning) return;
     
     setTransitioning(true);
-    setCurrentSlide((prev) => (prev + 1) % HERO_IMAGES.length);
+    setCurrentSlide((prev) => (prev + 1) % HERO_CONTENT.length);
     
     // Reset transitioning state after animation completes
     setTimeout(() => setTransitioning(false), 1000);
@@ -65,7 +95,7 @@ const Hero: React.FC = () => {
     if (transitioning) return;
     
     setTransitioning(true);
-    setCurrentSlide((prev) => (prev - 1 + HERO_IMAGES.length) % HERO_IMAGES.length);
+    setCurrentSlide((prev) => (prev - 1 + HERO_CONTENT.length) % HERO_CONTENT.length);
     
     // Reset transitioning state after animation completes
     setTimeout(() => setTransitioning(false), 1000);
@@ -86,33 +116,70 @@ const Hero: React.FC = () => {
       id="home" 
       className="relative h-screen w-full overflow-hidden bg-black"
     >
-      {/* Background with Improved Carousel Effect */}
+      {/* Background with Enhanced Carousel Effect */}
       <div className="absolute inset-0 z-0">
-        {HERO_IMAGES.map((image, index) => (
+        {HERO_CONTENT.map((content, index) => (
           <div 
             key={index}
             className={cn(
-              "absolute inset-0 bg-cover bg-center transition-all duration-1000",
+              "absolute inset-0 transition-all duration-1200",
               currentSlide === index 
-                ? "opacity-100 scale-105 z-10" 
-                : "opacity-0 scale-100 z-0"
+                ? "opacity-100 z-10" 
+                : "opacity-0 z-0"
             )}
             style={{
-              backgroundImage: `url(${image.src})`,
-              transform: `translate(${parallaxElements.x}px, ${parallaxElements.y}px) scale(${currentSlide === index ? 1.05 : 1})`,
-              transition: "opacity 1s ease-in-out, transform 1.2s ease-in-out"
+              transform: `translate(${parallaxElements.x}px, ${parallaxElements.y}px)`,
+              transition: "opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.5s ease-in-out"
             }}
-          />
+          >
+            {content.type === 'image' ? (
+              <div 
+                className="absolute inset-0 bg-cover bg-center h-full w-full"
+                style={{
+                  backgroundImage: `url(${content.src})`,
+                  transform: `scale(${currentSlide === index ? 1.05 : 1})`,
+                  transition: "transform 7s ease-out"
+                }}
+                aria-label={content.alt}
+              />
+            ) : (
+              <div className="absolute inset-0 h-full w-full overflow-hidden">
+                <video
+                  ref={videoRef}
+                  src={content.src}
+                  poster={content.poster}
+                  muted
+                  loop
+                  playsInline
+                  className="absolute inset-0 h-full w-full object-cover"
+                  aria-label={content.alt}
+                />
+                {currentSlide === index && (
+                  <button 
+                    onClick={toggleVideoPlayback}
+                    className="absolute bottom-32 right-6 md:bottom-36 md:right-10 bg-black/50 text-white p-3 rounded-full backdrop-blur-sm hover:bg-black/70 transition-all z-50"
+                    aria-label={isVideoPlaying ? "Pause video" : "Play video"}
+                  >
+                    {isVideoPlaying ? (
+                      <Pause className="w-5 h-5" />
+                    ) : (
+                      <Play className="w-5 h-5" />
+                    )}
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
         ))}
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/40 z-20" />
       </div>
 
-      {/* Carousel Controls - More visible on mobile */}
+      {/* Enhanced Carousel Controls */}
       <div className="absolute bottom-1/2 w-full flex justify-between px-4 md:px-8 z-30">
         <button 
           onClick={goToPrevSlide}
           disabled={transitioning}
-          className="bg-black/40 backdrop-blur-sm text-white p-3 rounded-full hover:bg-black/60 active:scale-95 transition-all duration-300 flex items-center justify-center"
+          className="bg-black/40 backdrop-blur-sm text-white p-3 rounded-full hover:bg-black/60 active:scale-95 transition-all duration-300 flex items-center justify-center transform hover:translate-x-[-5px]"
           aria-label="Previous slide"
         >
           <ChevronLeft className="w-5 h-5" />
@@ -120,7 +187,7 @@ const Hero: React.FC = () => {
         <button 
           onClick={goToNextSlide}
           disabled={transitioning}
-          className="bg-black/40 backdrop-blur-sm text-white p-3 rounded-full hover:bg-black/60 active:scale-95 transition-all duration-300 flex items-center justify-center"
+          className="bg-black/40 backdrop-blur-sm text-white p-3 rounded-full hover:bg-black/60 active:scale-95 transition-all duration-300 flex items-center justify-center transform hover:translate-x-[5px]"
           aria-label="Next slide"
         >
           <ChevronRight className="w-5 h-5" />
@@ -129,7 +196,7 @@ const Hero: React.FC = () => {
 
       {/* Improved Carousel Indicators */}
       <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 z-30 flex space-x-3">
-        {HERO_IMAGES.map((_, index) => (
+        {HERO_CONTENT.map((content, index) => (
           <button
             key={index}
             onClick={() => goToSlide(index)}
@@ -140,12 +207,16 @@ const Hero: React.FC = () => {
                 ? "bg-gold w-8 h-2" 
                 : "bg-white/40 w-2 h-2 hover:bg-white/70"
             )}
-            aria-label={`Go to slide ${index + 1}`}
-          />
+            aria-label={`Go to slide ${index + 1}${content.type === 'video' ? ' (video)' : ''}`}
+          >
+            {content.type === 'video' && (
+              <span className="sr-only">Video</span>
+            )}
+          </button>
         ))}
       </div>
 
-      {/* Content with improved animations */}
+      {/* Enhanced Content with improved animations */}
       <div className="relative z-20 h-full flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-5xl mx-auto">
           <FadeIn delay={0.3} direction="up" duration={1} initialOpacity={0}>
@@ -186,7 +257,7 @@ const Hero: React.FC = () => {
         </div>
       </div>
 
-      {/* Scroll indicator with improved animation */}
+      {/* Enhanced scroll indicator with improved animation */}
       <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20">
         <div className={cn(
           "flex flex-col items-center transition-opacity duration-1000",
