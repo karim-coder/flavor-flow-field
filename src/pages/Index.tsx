@@ -1,16 +1,20 @@
-
-import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import Navbar from '@/components/Navbar';
-import Hero from '@/components/Hero';
-import About from '@/components/About';
-import Menu from '@/components/Menu';
-import Chefs from '@/components/Chefs';
-import Testimonials from '@/components/Testimonials';
-import Reservation from '@/components/Reservation';
-import Gallery from '@/components/Gallery';
-import Contact from '@/components/Contact';
-import Footer from '@/components/Footer';
+import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import Navbar from "@/components/Navbar";
+import Hero from "@/components/Hero";
+import About from "@/components/About";
+import Menu from "@/components/Menu";
+import Chefs from "@/components/Chefs";
+import Testimonials from "@/components/Testimonials";
+import Reservation from "@/components/Reservation";
+import Gallery from "@/components/Gallery";
+import Contact from "@/components/Contact";
+import Footer from "@/components/Footer";
+import { KPatternBackground } from "@/components/PatternBackground";
+import Chef from "@/components/Chef";
+import Celebrations from "@/components/Celebrations";
+import PrivateDiningCarousel from "@/components/PrivateDiningCarousel";
+import Weddings from "@/components/Weddings";
 
 const Index = () => {
   const location = useLocation();
@@ -24,7 +28,7 @@ const Index = () => {
         setTimeout(() => {
           window.scrollTo({
             top: element.offsetTop - 100,
-            behavior: 'smooth'
+            behavior: "smooth",
           });
         }, 100);
       }
@@ -37,7 +41,11 @@ const Index = () => {
     <div className="min-h-screen overflow-hidden">
       <Navbar />
       <Hero />
+      <Chef />
       <About />
+      <Celebrations />
+      <PrivateDiningCarousel />
+      <Weddings />
       <Menu />
       <Chefs />
       <Testimonials />

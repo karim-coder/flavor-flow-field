@@ -1,15 +1,14 @@
-
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from "react";
 
 interface FadeInProps {
   children: React.ReactNode;
   delay?: number;
-  direction?: 'up' | 'down' | 'left' | 'right' | 'none';
+  direction?: "up" | "down" | "left" | "right" | "none";
   duration?: number;
   className?: string;
   threshold?: number;
   once?: boolean;
-  distance?: number;
+  size?: "small" | "medium" | "large";
   initialOpacity?: number;
   easing?: string;
   springEffect?: boolean;
@@ -20,20 +19,36 @@ interface FadeInProps {
 const FadeIn: React.FC<FadeInProps> = ({
   children,
   delay = 0,
-  direction = 'up',
+  direction = "up",
   duration = 0.9,
-  className = '',
+  className = "",
   threshold = 0.1,
   once = true,
-  distance = 40,
+  size = "medium",
   initialOpacity = 0,
-  easing = 'cubic-bezier(0.215, 0.61, 0.355, 1)',
+  easing = "cubic-bezier(0.215, 0.61, 0.355, 1)",
   springEffect = false,
   staggerChildren = false,
   childrenDelay = 0.1,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const domRef = useRef<HTMLDivElement>(null);
+
+  // Map size to distance values
+  const getDistanceValue = () => {
+    switch (size) {
+      case "small":
+        return 30;
+      case "medium":
+        return 60;
+      case "large":
+        return 120;
+      default:
+        return 40;
+    }
+  };
+
+  const distance = getDistanceValue();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -67,27 +82,27 @@ const FadeIn: React.FC<FadeInProps> = ({
   const getTransformStyle = () => {
     if (!isVisible) {
       switch (direction) {
-        case 'up':
+        case "up":
           return `translateY(${distance}px)`;
-        case 'down':
+        case "down":
           return `translateY(-${distance}px)`;
-        case 'left':
+        case "left":
           return `translateX(${distance}px)`;
-        case 'right':
+        case "right":
           return `translateX(-${distance}px)`;
-        case 'none':
-          return '';
+        case "none":
+          return "";
         default:
           return `translateY(${distance}px)`;
       }
     }
-    return '';
+    return "";
   };
 
   const getTransitionStyle = () => {
     let transitionTiming = easing;
     if (springEffect) {
-      transitionTiming = 'cubic-bezier(0.34, 1.56, 0.64, 1)';
+      transitionTiming = "cubic-bezier(0.34, 1.56, 0.64, 1)";
     }
     return `opacity ${duration}s ${delay}s ${transitionTiming}, transform ${duration}s ${delay}s ${transitionTiming}`;
   };
@@ -100,9 +115,13 @@ const FadeIn: React.FC<FadeInProps> = ({
       style: {
         ...(child as React.ReactElement).props.style,
         opacity: isVisible ? 1 : initialOpacity / 100,
-        transform: isVisible ? 'translate(0, 0)' : getTransformStyle(),
-        transition: `opacity ${duration}s ${delay + index * childrenDelay}s ${easing}, transform ${duration}s ${delay + index * childrenDelay}s ${easing}`,
-      }
+        transform: isVisible ? "translate(0, 0)" : getTransformStyle(),
+        transition: `opacity ${duration}s ${
+          delay + index * childrenDelay
+        }s ${easing}, transform ${duration}s ${
+          delay + index * childrenDelay
+        }s ${easing}`,
+      },
     });
   });
 
@@ -110,11 +129,15 @@ const FadeIn: React.FC<FadeInProps> = ({
     <div
       ref={domRef}
       className={className}
-      style={!staggerChildren ? {
-        opacity: isVisible ? 1 : initialOpacity / 100,
-        transform: isVisible ? 'translate(0, 0)' : getTransformStyle(),
-        transition: getTransitionStyle(),
-      } : undefined}
+      style={
+        !staggerChildren
+          ? {
+              opacity: isVisible ? 1 : initialOpacity / 100,
+              transform: isVisible ? "translate(0, 0)" : getTransformStyle(),
+              transition: getTransitionStyle(),
+            }
+          : undefined
+      }
     >
       {staggerChildren ? childrenWithStagger : children}
     </div>
