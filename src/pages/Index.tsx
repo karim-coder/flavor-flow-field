@@ -10,11 +10,12 @@ import Reservation from "@/components/Reservation";
 import Gallery from "@/components/Gallery";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
-import { KPatternBackground } from "@/components/PatternBackground";
 import Chef from "@/components/Chef";
 import Celebrations from "@/components/Celebrations";
 import PrivateDiningCarousel from "@/components/PrivateDiningCarousel";
 import Weddings from "@/components/Weddings";
+import OurStory from "@/components/OurStory";
+import FooterAlt from "@/components/FooterAlt";
 
 const Index = () => {
   const location = useLocation();
@@ -46,12 +47,15 @@ const Index = () => {
       <Celebrations />
       <PrivateDiningCarousel />
       <Weddings />
-      <Menu />
+      <OurStory />
+
+      <FooterAlt />
+      {/* <Menu />
       <Chefs />
       <Testimonials />
       <Reservation />
       <Gallery />
-      <Contact />
+      <Contact /> */}
       <Footer />
     </div>
   );

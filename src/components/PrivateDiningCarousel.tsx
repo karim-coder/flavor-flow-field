@@ -52,7 +52,7 @@ const PrivateDiningCarousel = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 bg-[#af905c] text-white">
+    <section className="py-12 md:py-16 lg:py-20 bg-[#af905c] text-white mt-20">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-16 space-y-4">
           <h2 className="text-xl md:text-2xl lg:text-3xl font-bold tracking-wide text-white uppercase">

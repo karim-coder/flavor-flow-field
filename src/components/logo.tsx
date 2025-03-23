@@ -1,5 +1,3 @@
-import React from "react";
-
 const Logo = ({ className = "", color = "#af905c" }) => {
   return (
     <h1
