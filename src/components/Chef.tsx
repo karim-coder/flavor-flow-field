@@ -70,7 +70,7 @@ const Chef = () => {
                     fillColor="#af905c"
                     backgroundColor="bg-[transparent]"
                     patternSize="50px"
-                    className="w-[200px] h-[50px]"
+                    className="w-[200px] h-[48px]"
                   />
                 </div>
               </FadeIn>

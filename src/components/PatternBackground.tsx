@@ -31,32 +31,36 @@ export const KPatternBackground = ({
   const totalHeight = kHeight * 2 + spacingNum * 2;
 
   const encodedSvg = encodeURIComponent(`
-    <svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="${totalHeight}" viewBox="0 0 ${totalWidth} ${totalHeight}">
-      <rect x="0" y="0" width="${totalWidth}" height="${totalHeight}" fill="none" />
-      
-      <g transform="translate(${spacingNum},${spacingNum}) scale(-1,1) translate(-${kWidth},0)">
-        <path d="${kSvgPath}" fill="${fillColor}" stroke="${strokeColor}" stroke-width="${strokeWidth}"/>
-      </g>
-      
-      <g transform="translate(${kWidth + spacingNum * 2 + kWidth / 2},${
-    spacingNum + kHeight / 2
-  })  translate(-${kWidth / 2},-${kHeight / 2})">
-        <path d="${kSvgPath}" fill="${fillColor}" stroke="${strokeColor}" stroke-width="${strokeWidth}"/>
-      </g>
-      
-      <g transform="translate(${spacingNum},${
+  <svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="${totalHeight}" viewBox="0 0 ${totalWidth} ${totalHeight}">
+    <rect x="0" y="0" width="${totalWidth}" height="${totalHeight}" fill="none" />
+    
+    <!-- K1: Top-left (flipped horizontally) -->
+    <g transform="translate(${spacingNum},${spacingNum}) scale(-1,-1)  translate(-${kWidth},-${kHeight})">
+      <path d="${kSvgPath}" fill="${fillColor}" stroke="${strokeColor}" stroke-width="${strokeWidth}"/>
+    </g>
+    
+    <!-- K2: Top-right (flipped vertically) -->
+    <g transform="translate(${
+      kWidth + spacingNum * 2
+    },${spacingNum}) scale(1,-1) translate(0,-${kHeight})">
+      <path d="${kSvgPath}" fill="${fillColor}" stroke="${strokeColor}" stroke-width="${strokeWidth}"/>
+    </g>
+    
+   <!-- K3: Bottom-left (flipped horizontally) -->
+    <g transform="translate(${spacingNum},${
     kHeight + spacingNum * 2
-  }) scale(-1,-1) translate(-${kWidth},-${kHeight})">
-        <path d="${kSvgPath}" fill="${fillColor}" stroke="${strokeColor}" stroke-width="${strokeWidth}"/>
-      </g>
-      
-      <g transform="translate(${kWidth + spacingNum * 2},${
+  }) scale(-1,1) translate(-${kWidth},0)">
+      <path d="${kSvgPath}" fill="${fillColor}" stroke="${strokeColor}" stroke-width="${strokeWidth}"/>
+    </g>
+    
+    <!-- K4: Bottom-right (original orientation) -->
+    <g transform="translate(${kWidth + spacingNum * 2},${
     kHeight + spacingNum * 2
-  }) scale(1,-1) translate(0,-${kHeight})">
-        <path d="${kSvgPath}" fill="${fillColor}" stroke="${strokeColor}" stroke-width="${strokeWidth}"/>
-      </g>
-    </svg>
-  `);
+  })">
+      <path d="${kSvgPath}" fill="${fillColor}" stroke="${strokeColor}" stroke-width="${strokeWidth}"/>
+    </g>
+  </svg>
+`);
 
   return (
     <div

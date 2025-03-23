@@ -281,9 +281,3 @@
   font-style: normal;
   font-display: swap;
 }
-
-body {
-  background-image: url("/bg.jpeg");
-  background-repeat: repeat;
-  background-size: 300px;
-}
