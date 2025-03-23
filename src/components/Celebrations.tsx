@@ -39,7 +39,7 @@ const Celebrations: React.FC = () => {
           {/* Ensure both columns have equal height */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-stretch overflow-hidden">
             <div className="bg-[#af905c] flex flex-col h-full">
-              <div className="p-0 md:p-8 lg:p-12 items-center text-center">
+              <div className="p-4 md:p-8 lg:p-12 items-center text-center">
                 <FadeIn delay={0.1} direction="up" duration={0.8} once={true}>
                   <Logo color="black" />
                 </FadeIn>

@@ -29,7 +29,7 @@ const Chef = () => {
     <section className="w-full py-12 md:py-16 lg:py-20 overflow-hidden bg-pattern">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center overflow-hidden">
-          <div className="px-0 md:px-12 lg:px-20">
+          <div className="p-4 md:p-8 lg:p-12">
             <div>
               {/* Main Heading */}
               <FadeIn delay={0.2} direction="up" duration={0.8} once={true}>

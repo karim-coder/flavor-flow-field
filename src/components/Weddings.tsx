@@ -7,24 +7,6 @@ import Logo from "@/components/logo";
 const Weddings: React.FC = () => {
   const navigate = useNavigate();
 
-  const testimonials = [
-    {
-      boldText: "The best of 2020's",
-      regularText: " eating out (and in).",
-      attribution: "– The Hot Dinners Awards",
-    },
-    {
-      boldText: "Unlike many City restaurants,",
-      regularText: " La Chapelle is a great bet on the weekend.",
-      attribution: "– Great British Chefs",
-    },
-    {
-      boldText: "The epitome of fine dining,",
-      regularText: " with exceptional service and stunning surroundings.",
-      attribution: "– Food & Travel Magazine",
-    },
-  ];
-
   return (
     <KPatternBackground
       strokeColor="#af905c"

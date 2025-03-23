@@ -58,7 +58,7 @@ const About: React.FC = () => {
 
             {/* Right Side (Content) */}
             <div className="bg-[#af905c] flex flex-col h-full order-1 lg:order-2">
-              <div className="p-0 md:p-8 lg:p-12 items-center text-center">
+              <div className="p-4 md:p-8 lg:p-12 items-center text-center">
                 <FadeIn delay={0.1} direction="up" duration={0.8} once={true}>
                   <Logo color="black" />
                 </FadeIn>

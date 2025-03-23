@@ -1,14 +1,9 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
-import Menu from "@/components/Menu";
-import Chefs from "@/components/Chefs";
-import Testimonials from "@/components/Testimonials";
-import Reservation from "@/components/Reservation";
-import Gallery from "@/components/Gallery";
-import Contact from "@/components/Contact";
+
 import Footer from "@/components/Footer";
 import Chef from "@/components/Chef";
 import Celebrations from "@/components/Celebrations";
@@ -48,14 +43,8 @@ const Index = () => {
       <PrivateDiningCarousel />
       <Weddings />
       <OurStory />
-
       <FooterAlt />
-      {/* <Menu />
-      <Chefs />
-      <Testimonials />
-      <Reservation />
-      <Gallery />
-      <Contact /> */}
+
       <Footer />
     </div>
   );
